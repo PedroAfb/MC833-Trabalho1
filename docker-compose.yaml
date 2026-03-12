@@ -1,0 +1,60 @@
+services:
+  roteador:
+    build: .
+    container_name: roteador
+    tty: true
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    sysctls:
+      - net.ipv4.ip_forward=1 # Ativa o encaminhamento de pacotes. Ou seja se chegar um pacote que não é pra esse container docker ele redireciona.
+    networks:
+      rede_a:
+        ipv4_address: 10.0.1.254
+      rede_b:
+        ipv4_address: 10.0.2.254
+    command: bash -c "apt-get update; tail -f /dev/null"
+    volumes:
+      - ./roteador:/app
+    working_dir: /app
+
+  servidor:
+    build: .
+    container_name: servidor
+    tty: true
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      rede_a:
+        ipv4_address: 10.0.1.2
+    command: bash -c "apt update; ip route del default; ip route add default via 10.0.1.254; tail -f /dev/null"
+    volumes:
+      - ./servidor:/app
+    working_dir: /app
+
+  cliente:
+    build: .
+    container_name: client
+    tty: true
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      rede_b:
+        ipv4_address: 10.0.2.2
+    # Por padrão o docker tentar ser o gateway dos containers, para o nosso ambiente funcionar nós mudamos para o getway ser o nosso roteador ;)
+    command: bash -c "apt update; ip route del default; ip route add default via 10.0.2.254; tail -f /dev/null"
+    volumes:
+      - ./cliente:/app
+    working_dir: /app
+
+networks:
+  rede_a:
+    ipam:
+      config:
+        - subnet: 10.0.1.0/24
+  rede_b:
+    ipam:
+      config:
+        - subnet: 10.0.2.0/24
