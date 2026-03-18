@@ -1,39 +1,79 @@
-## Ambiente dos Estudantes
+# Laboratorio MC833 - Streaming RTP em Raw Sockets
 
-É através desse ambiente ao qual você irá realizar uma bagatela de experimentos e testes durante a disciplina.
+## Setup rapido
 
-Ele é feito em docker com inicialmente com cliente, roteador e servidor.
-
-Os arquivos client.py, server.py e roteador.py nas respectivas pastas são mapeados direto para os containers gerados pelo docker compose e docker file. Dessa forma, mantenha eles sempre com o mesmo nome e arvore de diretórios. Você pode criar novos arquivos e alterar como bem entender o corpo de cada um deses scripts desde que mantenha os nomes iguais.
-
-O primeiro passo é instalar o [docker](https://docs.docker.com/desktop/setup/install/windows-install/). Siga os tutorias disponibilizados no site.
-
-## Como usar
-
-Abre um terminal dentro da pasta student-environment e execute o seguinte comando:
+1. Suba os containers:
 
 ```bash
-./lab.sh
+docker compose up -d
 ```
 
-Faça as alterações nos arquivos `./cliente/client.py`, `./roteador/router.py` e `./servidor/server.py` para enviar as alterações para os volumes/dockers, execute em outro terminal:
+2. Sincronize os arquivos do projeto para dentro dos containers:
 
 ```bash
 ./copy-files.sh
 ```
 
-Esse comando copia todos os arquivos das pastas `./client`, `./servidor` e `./roteador` para os volumes de cada container.
-
-Depois basta executar os comandos para iniciar cada script.py
+3. Verifique se os containers estao no ar:
 
 ```bash
-docker exec -it nome_do_container python3 nome_do_script_python.py
+docker compose ps
 ```
 
-Se você desejar executar algum comando em algum container você fazer algo semelhante:
+## Rodando a aplicacao
+
+1. Em um terminal, inicie o servidor:
 
 ```bash
-docker exec -it nome_do_container tcpdump -i any udp
+docker exec -it servidor python3 /app/server.py
 ```
 
-nesse comando executamos o comando tcpdump para capturar os pacotes que passam pela máquina que são UDP. Isso é util durante o processo de criação do código de vocês.
+2. Em outro terminal, inicie o cliente:
+
+```bash
+docker exec -it client python3 /app/client.py
+```
+
+## Workflow de uso (streaming)
+
+No prompt do cliente, use:
+
+```text
+catalog
+metrics
+stream <nome_video.ts>
+q
+```
+
+Fluxo recomendado:
+
+1. Rode `catalog` para listar os videos disponiveis no servidor.
+2. Rode `stream <nome_video.ts>` para receber um video.
+3. O arquivo recebido sera salvo em `./cliente/downloads/received_<nome_video.ts>`.
+4. Rode `metrics` quando quiser gerar o relatorio de metricas no servidor.
+
+## Workflow de desenvolvimento
+
+Sempre que alterar `cliente/client.py`, `servidor/server.py` ou outros arquivos dessas pastas:
+
+1. Rode novamente:
+
+```bash
+./copy-files.sh
+```
+
+2. Reinicie servidor e cliente.
+
+## Copiando resultados para o host
+
+Copiar video recebido do cliente:
+
+```bash
+docker cp client:/app/downloads/received_mengao.ts ./received_mengao.ts
+```
+
+Copiar metricas do servidor:
+
+```bash
+docker cp servidor:/app/metrics_report.json ./metrics_report.json
+```
