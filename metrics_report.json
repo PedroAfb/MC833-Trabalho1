@@ -1,0 +1,44 @@
+[
+  {
+    "video": "mengao.ts",
+    "file_size_bytes": 4807160,
+    "payload_bytes_per_packet": 1300,
+    "header_bytes_per_packet": 40,
+    "total_packets": 3698,
+    "total_header_bytes": 147920,
+    "exclusive_data_bytes": 4807160,
+    "duration_seconds": 29.283,
+    "estimated_frames_30fps": 878.498,
+    "packets_per_frame_30fps": 4.209457,
+    "tx_rate_bps_30fps": 1353761.518,
+    "tx_rate_mbps_30fps": 1.353762
+  },
+  {
+    "video": "nesk.ts",
+    "file_size_bytes": 16419544,
+    "payload_bytes_per_packet": 1300,
+    "header_bytes_per_packet": 40,
+    "total_packets": 12631,
+    "total_header_bytes": 505240,
+    "exclusive_data_bytes": 16419544,
+    "duration_seconds": 51.409,
+    "estimated_frames_30fps": 1542.27,
+    "packets_per_frame_30fps": 8.189878,
+    "tx_rate_bps_30fps": 2633864.673,
+    "tx_rate_mbps_30fps": 2.633865
+  },
+  {
+    "video": "too_easy.ts",
+    "file_size_bytes": 6483932,
+    "payload_bytes_per_packet": 1300,
+    "header_bytes_per_packet": 40,
+    "total_packets": 4988,
+    "total_header_bytes": 199520,
+    "exclusive_data_bytes": 6483932,
+    "duration_seconds": 6.684,
+    "estimated_frames_30fps": 200.527,
+    "packets_per_frame_30fps": 24.874416,
+    "tx_rate_bps_30fps": 7999612.222,
+    "tx_rate_mbps_30fps": 7.999612
+  }
+]
